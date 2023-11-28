@@ -27,6 +27,7 @@ export default function SignUp() {
         <input
           id="email_input"
           type="text"
+          autoComplete="email"
           onChange={(e) =>
             setCreateUserData((prev) => {
               return { ...prev, email: e.target.value };
@@ -37,6 +38,7 @@ export default function SignUp() {
         <input
           id="pass_input"
           type="password"
+          autoComplete="new-password"
           onChange={(e) =>
             setCreateUserData((prev) => {
               return { ...prev, password: e.target.value };
@@ -47,6 +49,7 @@ export default function SignUp() {
         <input
           id="confirm_input"
           type="password"
+          autoComplete="off"
           onChange={(e) =>
             setCreateUserData((prev) => {
               return { ...prev, confirm: e.target.value };

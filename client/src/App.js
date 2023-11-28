@@ -59,6 +59,7 @@ function App() {
               <input
                 id="email_confirm_input"
                 type="text"
+                autoComplete="email"
                 onChange={(e) =>
                   setConfirmUserData((prev) => {
                     return { ...prev, email: e.target.value };
@@ -69,6 +70,7 @@ function App() {
               <input
                 id="pass_confirm_input"
                 type="password"
+                autoComplete="off"
                 onChange={(e) =>
                   setConfirmUserData((prev) => {
                     return { ...prev, password: e.target.value };
@@ -88,6 +90,7 @@ function App() {
               <input
                 id="email_edit_input"
                 type="text"
+                autoComplete="email"
                 onChange={(e) =>
                   setUpdateUserData((prev) => {
                     return { ...prev, email: e.target.value };
@@ -98,6 +101,7 @@ function App() {
               <input
                 id="pass_edit_input"
                 type="password"
+                autoComplete="new-password"
                 onChange={(e) =>
                   setUpdateUserData((prev) => {
                     return { ...prev, password: e.target.value };
