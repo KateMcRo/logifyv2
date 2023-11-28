@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import SignUp from "./component/SignUp";
+import { useAppState } from "./appState";
 
 function App() {
+  const [appState] = useAppState();
+  console.log(appState);
   const [confirmUserData, setConfirmUserData] = useState({
     email: "",
     password: "",
@@ -49,6 +52,7 @@ function App() {
 
   return (
     <div className="App">
+      {appState.loggedIn ? <h1>Logged In</h1> : <h1>Logged Out</h1>}
       <SignUp />
       <div id="editForm">
         <form>

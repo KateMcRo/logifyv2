@@ -16,8 +16,11 @@ export default function SignUp() {
       },
       body: JSON.stringify(createUserData),
     });
-    const data = await response.json();
-    console.log(data);
+    const { data, token } = await response.json();
+    console.log({ data, token });
+    if (token) {
+      localStorage.setItem("authToken", JSON.stringify(token));
+    }
   }
   return (
     <div id="create_form">

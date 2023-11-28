@@ -2,7 +2,9 @@ const router = require("express").Router();
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
+// Find users
 router.get("/", async (req, res) => {
   try {
     const users = await User.find().select("-password");
@@ -13,6 +15,7 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Find a specific User by ID
 router.get("/:id", async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select("-password");
@@ -23,6 +26,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// Finds a User by email and confirms their password
 router.post("/confirm", async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
@@ -40,6 +44,7 @@ router.post("/confirm", async (req, res) => {
   }
 });
 
+// Creates a new User
 router.post("/create", async (req, res) => {
   console.log(req.body);
   try {
@@ -51,13 +56,18 @@ router.post("/create", async (req, res) => {
       id: user._id,
       email: user.email,
     };
-    res.json(data);
+    const token = await jwt.sign({ data }, process.env.JWT_SECRET, {
+      expiresIn: "2h",
+    });
+    console.log(token);
+    res.json({ data, token });
   } catch (error) {
     console.error(error);
     res.json({ error: error.message });
   }
 });
 
+// Update a specific User's details
 router.put("/update/:id", async (req, res) => {
   const patch = req.body;
   console.log(patch);
@@ -78,6 +88,7 @@ router.put("/update/:id", async (req, res) => {
   }
 });
 
+// Deletes a specific User
 router.delete("/delete/:id", async (req, res) => {
   try {
     const deletedUser = await User.findByIdAndDelete(req.params.id);
@@ -88,6 +99,7 @@ router.delete("/delete/:id", async (req, res) => {
   }
 });
 
+// Login a User
 router.post("/login", async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
@@ -110,9 +122,26 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// Log a User out
 router.post("/logout", async (req, res) => {
   res.clearCookie("jwt");
   res.status(200).json({ message: `🔥🗑️` });
+});
+
+// Check for valid token
+router.post("/validate", async (req, res) => {
+  try {
+    const token = req.headers.authorization;
+    console.log(token);
+    const valid = await jwt.verify(token, process.env.JWT_SECRET);
+    if (!valid) {
+      res.json({ message: "Invalid Token" }).status(500);
+    }
+    res.json({ message: "Success", valid }).status(200);
+  } catch (error) {
+    console.error("An error occurred:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 });
 
 module.exports = router;
