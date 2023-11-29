@@ -1,6 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAppState } from "../appState";
 
 export default function SignUp() {
+  const [, dispatch] = useAppState();
+
+  const navigate = useNavigate();
   const [createUserData, setCreateUserData] = useState({
     email: "",
     password: "",
@@ -20,6 +25,15 @@ export default function SignUp() {
     console.log({ data, token });
     if (token) {
       localStorage.setItem("authToken", JSON.stringify(token));
+      dispatch({
+        type: "SET_USER",
+        payload: {
+          id: data.id,
+          email: data.email,
+          loggedIn: true,
+        },
+      });
+      navigate("/dashboard");
     }
   }
   return (

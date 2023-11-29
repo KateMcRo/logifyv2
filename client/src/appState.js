@@ -25,6 +25,9 @@ const appStateReducer = (state, action) => {
         loggedIn: action.payload.loggedIn,
       };
     }
+    case "SET_LOGGED_OUT": {
+      return initialState;
+    }
     default:
       return initialState;
   }
@@ -43,11 +46,11 @@ export const AppStateProvider = ({ children }) => {
           Authorization: token,
         },
       });
-      const {
-        valid: { data },
-      } = await response.json();
-      console.log(data);
       if (response.ok) {
+        const {
+          valid: { data },
+        } = await response.json();
+
         dispatch({
           type: "SET_USER",
           payload: {

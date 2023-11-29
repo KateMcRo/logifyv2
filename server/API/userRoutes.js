@@ -77,6 +77,7 @@ router.put("/update/:id", async (req, res) => {
       { $set: patch },
       { new: true }
     );
+    user.save();
     const data = {
       id: user._id,
       email: user.email,
@@ -114,7 +115,9 @@ router.post("/login", async (req, res) => {
       id: user._id,
       email: user.email,
     };
-    const token = jwt.sign(data, "SECRET_KEY", { expiresIn: "4h" });
+    const token = jwt.sign({ data }, process.env.JWT_SECRET, {
+      expiresIn: "4h",
+    });
     res.json({ token, data });
   } catch (error) {
     console.error(error);
